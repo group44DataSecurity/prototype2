@@ -6,7 +6,10 @@ import java.rmi.RemoteException;
 public class Client {
 
     public static void main( String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-        HelloService service = (HelloService) Naming.lookup("rmi://localhost:5099/hello");
-        System.out.println("---" + service.echo("hello server" + "   " + service.getClass().getName()));
+        int port = 5099;
+        String name = "hello";
+        HelloService service = (HelloService) Naming.lookup("rmi://localhost:"+port+"/"+name);
+        System.out.println("--- " + service.echo("hey server"));
+        
     }
 }
