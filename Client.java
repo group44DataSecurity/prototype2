@@ -23,8 +23,9 @@ public class Client {
 
         if(login()) {
             System.out.println("Authenticated user.");
-
             service.start();
+            service.stop();
+            System.out.println("-----------------------------------");
         }
         
     }
