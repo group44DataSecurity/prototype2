@@ -21,17 +21,21 @@ public class Client {
 
         System.out.println("Client started.");
 
-        if(login()) System.out.println("Authenticated user.");
+        if(login()) {
+            System.out.println("Authenticated user.");
+
+            service.start();
+        }
         
     }
 
 
 
     public static boolean login(){
-        System.out.println("Enter your username");
+        System.out.println("Enter your username:");
 		String username = input.nextLine();  
 			
-		System.out.println("Enter your password");
+		System.out.println("Enter your password:");
 		String password = input.nextLine();
 
 
