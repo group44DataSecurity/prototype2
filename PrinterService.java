@@ -1,13 +1,14 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
-public class PrinterService {
+public class PrinterService extends UnicastRemoteObject implements PrinterServiceInterface {
 
     private HashMap<String, Printer> printers; // list with all the printers
     
     public PrinterService() throws RemoteException {
-
+        super();
     }
 
     public void print(String filename, String printer){ /// prints file filename on the specified printer
