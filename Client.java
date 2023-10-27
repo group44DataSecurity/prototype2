@@ -8,48 +8,54 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 
 public class Client {
-    static Scanner input = new Scanner(System.in); 
+    static Scanner input = new Scanner(System.in);
 
-    public static void main( String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         int port = 5099;
-        //String name = "hello";
-        //HelloService service = (HelloService) Naming.lookup("rmi://localhost:"+port+"/"+name);
-        //System.out.println("--- " + service.echo("hey server"));
+        // String name = "hello";
+        // HelloService service = (HelloService)
+        // Naming.lookup("rmi://localhost:"+port+"/"+name);
+        // System.out.println("--- " + service.echo("hey server"));
 
         String name = "print";
-        PrinterServiceInterface service = (PrinterServiceInterface) Naming.lookup("rmi://localhost:"+port+"/"+name);
+        PrinterServiceInterface service = (PrinterServiceInterface) Naming
+                .lookup("rmi://localhost:" + port + "/" + name);
 
         System.out.println("Client started.");
 
-        String printer1 = "Printer1";
+        String[] printers = {"Printer1","Printer2","Printer3"};
+        service.initPrinters(printers);
 
-        if(login()) {
-            System.out.println("Authenticated user.");
-            service.restart();
-            service.print("file1.pdf", printer1);
-            service.print("file2.pdf", printer1);
-            service.print("file3.pdf", printer1);
-            service.queue(printer1);
-            service.topQueue(printer1, 2);
-            service.queue(printer1);
-            service.setConfig("myParameter", "100");
-            service.setConfig("myParameter", "200");
-            service.readConfig("myParameter");
-            System.out.println("-----------------------------------");
+        // User user1 = new User("client1", "password1");
+
+        User user = getUser();
+        while (!service.authenticate(user)) {
+            System.out.println("Try again. Wrong credentials.");
+            user = getUser();
         }
-        
+
+        System.out.println("Authenticated user.");
+        service.restart();
+        service.print("file1.pdf", printers[0]);
+        service.print("file2.pdf", printers[0]);
+        service.print("file3.pdf", printers[0]);
+        service.queue(printers[0]);
+        service.topQueue(printers[0], 2);
+        service.queue(printers[0]);
+        service.setConfig("myParameter", "100");
+        service.setConfig("myParameter", "200");
+        service.readConfig("myParameter");
+        System.out.println("-----------------------------------");
+
     }
 
-
-
-    public static boolean login(){
+    public static User getUser() {
         System.out.println("Enter your username:");
-		String username = input.nextLine();  
-			
-		System.out.println("Enter your password:");
-		String password = input.nextLine();
+        String username = input.nextLine();
 
+        System.out.println("Enter your password:");
+        String password = input.nextLine();
 
-        return true; //always true for now
+        return new User(username, password);
     }
 }

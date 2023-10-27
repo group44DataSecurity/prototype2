@@ -22,4 +22,8 @@ public interface PrinterServiceInterface extends Remote {
     public void readConfig(String parameter) throws RemoteException; // prints the value of the parameter on the print server to the user's display
 
     public void setConfig(String parameter, String value) throws RemoteException; // sets the parameter on the print server to value
+
+    public void initPrinters(String[] printers) throws RemoteException;
+
+    public boolean authenticate (User user ) throws RemoteException;
 }

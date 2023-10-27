@@ -1,25 +1,68 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 //needed to write the log file
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+// Encryption
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class PrinterService extends UnicastRemoteObject implements PrinterServiceInterface {
 
     private HashMap<String, Printer> printers; // list with all the printers
     private HashMap<String, String> configs; // List with all parameters and values
 
+    private List<User> loggedClientList = new ArrayList<>();
+    
+    private int sessionToken;
+
     // Create the log file
     String fileName = "log.txt"; // TODO: Add logs for remaining commands
 
-    public PrinterService() throws RemoteException {
+    public PrinterService() throws RemoteException, NoSuchAlgorithmException {
         super();
         printers = new HashMap<String, Printer>();
-        printers.put("Printer1", new Printer("Printer1"));
         configs = new HashMap<String, String>();
+
+        
+        loggedClientList.add(new User("client1", "password1"));
+        loggedClientList.add(new User("client2", "passowrd2"));
+        
+        for (User loggedClient : loggedClientList) {
+            PasswordEncrypt(loggedClient.getPassword());
+        }
+        
+    }
+
+    public void PasswordEncrypt(String password) throws NoSuchAlgorithmException {
+        String hashPassword = hashPassword(password);
+        System.out.println("This is the password hashed: " + hashPassword);
+    }
+
+    public void SavePasswordFile() throws NoSuchAlgorithmException{
+
+    }
+
+    private static String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hasedBytes = messageDigest.digest(password.getBytes());
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b : hasedBytes) {
+            stringBuilder.append(String.format("%02x", b));
+        }
+        return stringBuilder.toString();
+    }
+
+    public void initPrinters(String[] printerList) throws RemoteException {
+        for (String p : printerList) {
+            printers.put(p, new Printer(p));
+        }
     }
 
     private Printer getPrinter(String printer) {
@@ -98,5 +141,21 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean authenticate(User user) throws RemoteException{
+        //magic for commands
+        for (User loggedClient : loggedClientList){
+            if (loggedClient.getUsername().equals(user.getUsername()) && loggedClient.getPassword().equals(user.getPassword())){
+                return true;
+            }
+        }
+        System.out.println("User not found");
+        return false;
+    } 
+
+    public int getSessionToken(int token){
+        sessionToken=token; 
+        return sessionToken;
     }
 }
