@@ -21,10 +21,20 @@ public class Client {
 
         System.out.println("Client started.");
 
+        String printer1 = "Printer1";
+
         if(login()) {
             System.out.println("Authenticated user.");
-            service.start();
-            service.stop();
+            service.restart();
+            service.print("file1.pdf", printer1);
+            service.print("file2.pdf", printer1);
+            service.print("file3.pdf", printer1);
+            service.queue(printer1);
+            service.topQueue(printer1, 2);
+            service.queue(printer1);
+            service.setConfig("myParameter", "100");
+            service.setConfig("myParameter", "200");
+            service.readConfig("myParameter");
             System.out.println("-----------------------------------");
         }
         
