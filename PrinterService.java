@@ -9,11 +9,11 @@ import java.util.Map;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 // Encryption
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+
 
 public class PrinterService extends UnicastRemoteObject implements PrinterServiceInterface {
 
@@ -162,7 +162,10 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
 
             byte[] password = pwsaltList.getFirst();
             byte[] salt = pwsaltList.getLast();
+            String byteString = new String(salt);
+            System.out.println(byteString);
             if (password.equals(hashPassword(user.getPassword(), salt))) {
+                
                 return true;
             }
         } 
