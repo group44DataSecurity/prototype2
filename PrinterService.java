@@ -20,7 +20,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private HashMap<String, Printer> printers; // list with all the printers
     private HashMap<String, String> configs; // List with all parameters and values
     private Map<String, List<byte[]>> database = new HashMap<String, List<byte[]>>(); // Username and Hashed p/w database
-
+    
     private List<User> loggedClientList = new ArrayList<>();
     
     private int sessionToken;
@@ -52,6 +52,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         pwsaltList.add(hashPassword);
         pwsaltList.add(salted);
 
+        //READ TEST
+        System.out.println("This is inside PwEncryptStore" + toHex(pwsaltList.getFirst()));
+        
         // Add the username and list containing encrypted pw and salt to the HashMap (our simulation of a database)
         database.put(user.getUsername(), pwsaltList);
     } 
@@ -68,6 +71,8 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         messageDigest.update(salt); // Link salt to the hash
         byte[] hasedBytes = messageDigest.digest(password.getBytes());
         messageDigest.reset(); // Reset digest to ensure no values are stored.
+
+        System.out.println("This is the hashed pw: " + toHex(hasedBytes)); //Test line remove
         return hasedBytes;
     }
 
@@ -155,6 +160,14 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         }
     }
 
+    public static String toHex(byte[] bytes){
+        StringBuilder hexString = new StringBuilder(); //(2 * bytes.length);
+        for (byte b : bytes) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
+    }
+
     public boolean authenticate(User user) throws RemoteException, NoSuchAlgorithmException{
         
         if (database.containsKey(user.getUsername())) {
@@ -162,12 +175,15 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
 
             byte[] password = pwsaltList.getFirst();
             byte[] salt = pwsaltList.getLast();
-            String byteString = new String(salt);
-            System.out.println(byteString);
-            if (password.equals(hashPassword(user.getPassword(), salt))) {
-                
+            byte[] passwordIn = hashPassword(user.getPassword(), salt);
+            
+            //BUG here with compare - even when strings are different it still returns true :(
+            if (toHex(password).equals(toHex(passwordIn))); {
+                System.out.println("Inside authenticate " + toHex(passwordIn)); //testing
+                System.out.println("Inside authenticate2 " + toHex(password)); //testing
                 return true;
             }
+            
         } 
 
         return false;
