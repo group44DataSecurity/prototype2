@@ -51,9 +51,6 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         List<byte[]> pwsaltList = new ArrayList<>();
         pwsaltList.add(hashPassword);
         pwsaltList.add(salted);
-
-        //READ TEST
-        System.out.println("This is inside PwEncryptStore" + toHex(pwsaltList.getFirst()));
         
         // Add the username and list containing encrypted pw and salt to the HashMap (our simulation of a database)
         database.put(user.getUsername(), pwsaltList);
@@ -72,7 +69,6 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         byte[] hasedBytes = messageDigest.digest(password.getBytes());
         messageDigest.reset(); // Reset digest to ensure no values are stored.
 
-        System.out.println("This is the hashed pw in hashPassword: " + toHex(hasedBytes)); //Test line remove
         return hasedBytes;
     }
 
@@ -179,8 +175,6 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             
             // Check user entered password against out hashed and salted database
             if (toHex(password).equals(toHex(passwordIn))) {
-                System.out.println("Inside authenticate " + toHex(passwordIn)); //testing
-                System.out.println("Inside authenticate2 " + toHex(password)); //testing
                 return true;
             }  
         } 
