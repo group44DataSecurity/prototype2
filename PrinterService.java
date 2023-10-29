@@ -72,7 +72,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         byte[] hasedBytes = messageDigest.digest(password.getBytes());
         messageDigest.reset(); // Reset digest to ensure no values are stored.
 
-        System.out.println("This is the hashed pw: " + toHex(hasedBytes)); //Test line remove
+        System.out.println("This is the hashed pw in hashPassword: " + toHex(hasedBytes)); //Test line remove
         return hasedBytes;
     }
 
@@ -177,13 +177,12 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             byte[] salt = pwsaltList.getLast();
             byte[] passwordIn = hashPassword(user.getPassword(), salt);
             
-            //BUG here with compare - even when strings are different it still returns true :(
-            if (toHex(password).equals(toHex(passwordIn))); {
+            // Check user entered password against out hashed and salted database
+            if (toHex(password).equals(toHex(passwordIn))) {
                 System.out.println("Inside authenticate " + toHex(passwordIn)); //testing
                 System.out.println("Inside authenticate2 " + toHex(password)); //testing
                 return true;
-            }
-            
+            }  
         } 
 
         return false;
