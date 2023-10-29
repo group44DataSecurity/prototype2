@@ -1,7 +1,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-
+import java.security.NoSuchAlgorithmException;
 
 public interface PrinterServiceInterface extends Remote {
     
@@ -25,5 +25,5 @@ public interface PrinterServiceInterface extends Remote {
 
     public void initPrinters(String[] printers) throws RemoteException;
 
-    public boolean authenticate (User user ) throws RemoteException;
+    public boolean authenticate (User user ) throws RemoteException, NoSuchAlgorithmException;
 }
