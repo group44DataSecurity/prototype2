@@ -20,8 +20,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private HashMap<String, Printer> printers; // list with all the printers
     private HashMap<String, String> configs; // List with all parameters and values
     private Map<String, List<byte[]>> database = new HashMap<String, List<byte[]>>(); // Username and Hashed p/w database
-    
+    private String[] printersNames = {"Printer1","Printer2","Printer3"};
     private List<User> loggedClientList = new ArrayList<>();
+    private clientCallBackInterface clientCallBack;
     
     private int sessionToken;
 
@@ -36,6 +37,10 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         
         loggedClientList.add(new User("client1", "password1"));
         loggedClientList.add(new User("client2", "passowrd2"));
+        //initialize printers 
+        
+        initPrinters(printersNames);
+
         
         for (User loggedClient : loggedClientList) {
             PasswordEncryptStore(loggedClient, loggedClient.getPassword(), generateSalt());
@@ -43,6 +48,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         
     }
 
+    public void setClientCallBack(clientCallBackInterface c) throws RemoteException{
+        this.clientCallBack = c;
+    } 
     public void PasswordEncryptStore(User user, String password, byte[] salted) throws NoSuchAlgorithmException {
         // Encyrpt the password.
         byte[] hashPassword = hashPassword(password, salted);
@@ -77,6 +85,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             printers.put(p, new Printer(p));
         }
     }
+    public String[] getPrintersList() throws RemoteException    {
+        return printersNames;
+    }
 
     private Printer getPrinter(String printer) {
         Printer foundPrinter = printers.get(printer);
@@ -90,8 +101,11 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     public void print(String filename, String printer) throws RemoteException { /// prints file filename on the
                                                                                 /// specified printer
         Printer foundPrinter = getPrinter(printer);
+        System.out.println("I am here in print");
         if (foundPrinter != null) {
             foundPrinter.addToQueue(filename);
+            clientCallBack.printOnClient("Printing " + filename + " on printer name: " + printer);
+            logEntry("print function invoked");
         }
     }
 
@@ -101,7 +115,10 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         Printer foundPrinter = getPrinter(printer);
         if (foundPrinter != null) {
             foundPrinter.queue();
+        } else{
+            clientCallBack.printOnClient("queue is empty");
         }
+        logEntry("queue function invoke");
     }
 
     public void topQueue(String printer, int job) throws RemoteException { // moves job to the top of the queue
@@ -109,6 +126,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         if (foundPrinter != null) {
             foundPrinter.topQueue(job);
         }
+        logEntry("Top queue function invoke");
     }
 
     public void start() throws RemoteException { // starts the print server
@@ -136,13 +154,19 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     public void readConfig(String parameter) throws RemoteException { // prints the value of the parameter on the print
                                                                       // server to the user's display
         System.out.println(configs.get(parameter)); // TODO: print on user's display
+        logEntry("readConfig function invoked, printing on display");
     }
 
     public void setConfig(String parameter, String value) throws RemoteException { // sets the parameter on the print
                                                                                    // server to value
         configs.put(parameter, value);
+        logEntry("setConfig function invoked");
     }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////   
+/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     private void logEntry(String text) { // Writes the log file
         try {
             FileWriter fileWriter = new FileWriter(fileName, true); // Create a FileWriter with the file name
@@ -184,5 +208,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     public int getSessionToken(int token){
         sessionToken=token; 
         return sessionToken;
+    }
+
+    public void printWithCallback(String message) throws RemoteException{
+        clientCallBack.printOnClient(message);
     }
 }

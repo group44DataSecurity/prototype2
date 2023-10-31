@@ -23,9 +23,10 @@ public class Client {
 
         System.out.println("Client started.");
 
-        String[] printers = {"Printer1","Printer2","Printer3"};
-        service.initPrinters(printers);
-
+        String[] printers = service.getPrintersList();
+        
+        clientCallBackInterface clientcallback = new ClientCallBack();
+        service.setClientCallBack(clientcallback);
         // User user1 = new User("client1", "password1");
 
         User user = getUser();
@@ -35,7 +36,7 @@ public class Client {
         }
 
         System.out.println("Authenticated user.");
-        service.restart();
+        //service.restart(); 
         service.print("file1.pdf", printers[0]);
         service.print("file2.pdf", printers[0]);
         service.print("file3.pdf", printers[0]);
@@ -46,7 +47,7 @@ public class Client {
         service.setConfig("myParameter", "200");
         service.readConfig("myParameter");
         System.out.println("-----------------------------------");
-
+        
     }
 
     public static User getUser() {

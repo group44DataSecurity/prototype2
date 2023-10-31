@@ -27,6 +27,9 @@ public class Printer {
 
     }
 
+    /* public LinkedList<Job> getQueue(){
+        return printerQueue;
+    } */
     public String getName() {
         return name;
     }
@@ -42,8 +45,9 @@ public class Printer {
     public void queue() { // lists the print queue for a given printer on the user's display in lines of
                           // the form <job number> <file name>
         for (Job j : printerQueue) {
-            System.out.println(j.jobNumber + "   " + j.fileName); // TODO: print on user's display
+            System.out.println("Job number: " + j.jobNumber + "   " + "Filename: " + j.fileName); // TODO: print on user's display
         }
+        
     }
 
     public void addToQueue(String fileName) { // adds job to printer's queue
@@ -55,6 +59,7 @@ public class Printer {
         for (Job j : printerQueue) {
             if (j.jobNumber == job) {
                 foundJob = j;
+                System.out.println("job number: " + job + "moved on top");
                 break;
             }
         }

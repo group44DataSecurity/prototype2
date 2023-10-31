@@ -29,6 +29,7 @@ public class ApplicationServer {
         //Registry registry = LocateRegistry.createRegistry(port);
         System.out.println("rebinding service to name: " + name);
         registry.rebind(name, service);
+        
     
 
     }
