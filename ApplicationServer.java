@@ -16,15 +16,15 @@ public class ApplicationServer {
         Registry registry = LocateRegistry.createRegistry(port);
 
         String AUTHname = "session";
-        AuthenticationService authenticationService = new AuthenticationService();
-        registry.rebind(AUTHname, authenticationService);
-        int sessionToken = authenticationService.getToken();
-        System.out.println("--------Session token:" + sessionToken);
+        //AuthenticationService authenticationService = new AuthenticationService();
+        //registry.rebind(AUTHname, authenticationService);
+        //int sessionToken = authenticationService.getToken();
+        //System.out.println("--------Session token:" + sessionToken);
 
 
         String name = "print";
         PrinterService service = new PrinterService();
-        service.getSessionToken(sessionToken);
+        //service.getSessionToken(sessionToken);
         System.out.println("Creating registry for port: " + port);
         //Registry registry = LocateRegistry.createRegistry(port);
         System.out.println("rebinding service to name: " + name);

@@ -3,6 +3,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 //needed to write the log file
@@ -42,6 +43,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         initPrinters(printersNames);
 
         
+
         for (User loggedClient : loggedClientList) {
             PasswordEncryptStore(loggedClient, loggedClient.getPassword(), generateSalt());
         }
@@ -101,7 +103,6 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     public void print(String filename, String printer) throws RemoteException { /// prints file filename on the
                                                                                 /// specified printer
         Printer foundPrinter = getPrinter(printer);
-        System.out.println("I am here in print");
         if (foundPrinter != null) {
             foundPrinter.addToQueue(filename);
             clientCallBack.printOnClient("Printing " + filename + " on printer name: " + printer);
@@ -114,7 +115,12 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
                                                                // name>
         Printer foundPrinter = getPrinter(printer);
         if (foundPrinter != null) {
-            foundPrinter.queue();
+            List<String> queueList = foundPrinter.queue();
+            //printing the queue list
+            for(String queue : queueList){
+                clientCallBack.printOnClient(queue);
+            }
+
         } else{
             clientCallBack.printOnClient("queue is empty");
         }
@@ -125,6 +131,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         Printer foundPrinter = getPrinter(printer);
         if (foundPrinter != null) {
             foundPrinter.topQueue(job);
+            clientCallBack.printOnClient("moving job number: " + job + " on top");
         }
         logEntry("Top queue function invoke");
     }
@@ -153,13 +160,15 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
 
     public void readConfig(String parameter) throws RemoteException { // prints the value of the parameter on the print
                                                                       // server to the user's display
-        System.out.println(configs.get(parameter)); // TODO: print on user's display
+        clientCallBack.printOnClient("reading configuration: " + configs.get(parameter)); // TODO: print on user's display
+
         logEntry("readConfig function invoked, printing on display");
     }
 
     public void setConfig(String parameter, String value) throws RemoteException { // sets the parameter on the print
                                                                                    // server to value
         configs.put(parameter, value);
+        clientCallBack.printOnClient("setting configuration" + parameter + " value: " + value);
         logEntry("setConfig function invoked");
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

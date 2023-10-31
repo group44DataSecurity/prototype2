@@ -1,5 +1,5 @@
 
-import java.util.LinkedList;
+import java.util.*;
 
 public class Printer {
 
@@ -42,13 +42,16 @@ public class Printer {
         return this.status = status;
     }
 
-    public void queue() { // lists the print queue for a given printer on the user's display in lines of
+
+    public List<String> queue() { // lists the print queue for a given printer on the user's display in lines of
                           // the form <job number> <file name>
+        List<String> queuelist = new ArrayList<String>();
         for (Job j : printerQueue) {
-            System.out.println("Job number: " + j.jobNumber + "   " + "Filename: " + j.fileName); // TODO: print on user's display
+            queuelist.add("Job number: " + j.jobNumber + "   " + "Filename: " + j.fileName); // TODO: print on user's display
         }
         
-    }
+        return queuelist;
+    } 
 
     public void addToQueue(String fileName) { // adds job to printer's queue
         printerQueue.add(new Job(fileName));
