@@ -4,7 +4,7 @@ import java.util.*;
 public class Printer {
 
     private String name; // Name of the printer
-    private String status; // Status of the printer
+    private Boolean status; // Status of the printer
     private LinkedList<Job> printerQueue; // Queue for printer jobs
     private int prevJobNumber;
 
@@ -22,6 +22,7 @@ public class Printer {
     public Printer(String name) {
         this.name = name;
         prevJobNumber = 0;
+        status = true;
         printerQueue = new LinkedList<Job>();
         // printerQueue = new HashMap<>;
 
@@ -34,12 +35,8 @@ public class Printer {
         return name;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
-    }
-
-    public String setStatus() {
-        return this.status = status;
     }
 
 

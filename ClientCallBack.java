@@ -10,4 +10,5 @@ public class ClientCallBack extends UnicastRemoteObject implements clientCallBac
     public void printOnClient(String message) throws RemoteException{
         System.out.println("From server: " + message);
     }
+
 }

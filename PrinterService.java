@@ -24,6 +24,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private String[] printersNames = {"Printer1","Printer2","Printer3"};
     private List<User> loggedClientList = new ArrayList<>();
     private clientCallBackInterface clientCallBack;
+    private AuthenticationServiceInterface session;
     
     private int sessionToken;
 
@@ -53,6 +54,14 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     public void setClientCallBack(clientCallBackInterface c) throws RemoteException{
         this.clientCallBack = c;
     } 
+
+    public int getSessionId() throws RemoteException{
+        session = new AuthenticationService();
+        int sessionID = session.getToken();
+        clientCallBack.printOnClient("The session ID token is: " + sessionID);
+        logEntry("Session ID assigned");
+        return sessionID;
+    }
     public void PasswordEncryptStore(User user, String password, byte[] salted) throws NoSuchAlgorithmException {
         // Encyrpt the password.
         byte[] hashPassword = hashPassword(password, salted);
@@ -100,49 +109,60 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         return foundPrinter;
     }
 
-    public void print(String filename, String printer) throws RemoteException { /// prints file filename on the
+    public void print(int sessionIDClient,String filename, String printer) throws RemoteException { /// prints file filename on the
                                                                                 /// specified printer
-        Printer foundPrinter = getPrinter(printer);
-        if (foundPrinter != null) {
-            foundPrinter.addToQueue(filename);
-            clientCallBack.printOnClient("Printing " + filename + " on printer name: " + printer);
-            logEntry("print function invoked");
+        if (sessionIDClient == session.getToken()){
+
+        
+            Printer foundPrinter = getPrinter(printer);
+            if (foundPrinter != null) {
+                foundPrinter.addToQueue(filename);
+                clientCallBack.printOnClient("Printing " + filename + " on printer name: " + printer);
+                logEntry("print function invoked - session ID: " + sessionIDClient);
+            }
         }
     }
 
-    public void queue(String printer) throws RemoteException { // lists the print queue for a given printer on the
+    public void queue(int sessionIDClient, String printer) throws RemoteException { // lists the print queue for a given printer on the
                                                                // user's display in lines of the form <job number> <file
                                                                // name>
-        Printer foundPrinter = getPrinter(printer);
-        if (foundPrinter != null) {
-            List<String> queueList = foundPrinter.queue();
-            //printing the queue list
-            for(String queue : queueList){
-                clientCallBack.printOnClient(queue);
-            }
+        if (sessionIDClient == session.getToken()){
+            Printer foundPrinter = getPrinter(printer);
+            if (foundPrinter != null) {
+                List<String> queueList = foundPrinter.queue();
+                //printing the queue list
+                for(String queue : queueList){
+                    clientCallBack.printOnClient(queue);
+                }
 
-        } else{
-            clientCallBack.printOnClient("queue is empty");
+            } else{
+                clientCallBack.printOnClient("queue is empty");
+            }
+            logEntry("queue function invoke - session ID: " + sessionIDClient);
         }
-        logEntry("queue function invoke");
     }
 
-    public void topQueue(String printer, int job) throws RemoteException { // moves job to the top of the queue
-        Printer foundPrinter = getPrinter(printer);
-        if (foundPrinter != null) {
-            foundPrinter.topQueue(job);
-            clientCallBack.printOnClient("moving job number: " + job + " on top");
+    public void topQueue(int sessionIDClient,String printer, int job) throws RemoteException { // moves job to the top of the queue
+        
+        if (sessionIDClient == session.getToken()){
+            Printer foundPrinter = getPrinter(printer);
+            if (foundPrinter != null) {
+                foundPrinter.topQueue(job);
+                clientCallBack.printOnClient("moving job number: " + job + " on top");
+            }
+            logEntry("Top queue function invoke - session ID: " + sessionIDClient);
         }
-        logEntry("Top queue function invoke");
     }
 
     public void start() throws RemoteException { // starts the print server
         logEntry("--Print server started.");
+        clientCallBack.printOnClient("starting the printer server");
 
     }
 
     public void stop() throws RemoteException { // stops the print server
         logEntry("--Print server stopped.");
+        clientCallBack.printOnClient("stopping the printer server");
     }
 
     public void restart() throws RemoteException { // stops the print server, clears the print queue and starts the
@@ -152,24 +172,42 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             p.clearPrinterQueue();
         }
         start();
+
+        logEntry("--Print server restarted.");
     }
 
-    public void status(String printer) throws RemoteException { // prints status of printer on the user's display
-
+    public void status(int sessionIDClient, String printer) throws RemoteException { // prints status of printer on the user's display
+        if (sessionIDClient == session.getToken()){
+            Printer foundPrinter = getPrinter(printer);
+            if (foundPrinter.getStatus()){
+                clientCallBack.printOnClient("Printer is active");
+            }else{
+                clientCallBack.printOnClient("Printer is not active");
+            }
+            logEntry("status function invoked - session ID: " + sessionIDClient);
+        }
+        
     }
 
-    public void readConfig(String parameter) throws RemoteException { // prints the value of the parameter on the print
+    public void readConfig(int sessionIDClient, String parameter) throws RemoteException { // prints the value of the parameter on the print
                                                                       // server to the user's display
-        clientCallBack.printOnClient("reading configuration: " + configs.get(parameter)); // TODO: print on user's display
+        
+        if (sessionIDClient == session.getToken()){
+            clientCallBack.printOnClient("reading configuration: " + configs.get(parameter)); // TODO: print on user's display
 
-        logEntry("readConfig function invoked, printing on display");
+
+            logEntry("readConfig function invoked, printing on display - session ID: " + sessionIDClient);
+        }
     }
 
-    public void setConfig(String parameter, String value) throws RemoteException { // sets the parameter on the print
+    public void setConfig(int sessionIDClient, String parameter, String value) throws RemoteException { // sets the parameter on the print
                                                                                    // server to value
-        configs.put(parameter, value);
-        clientCallBack.printOnClient("setting configuration" + parameter + " value: " + value);
-        logEntry("setConfig function invoked");
+        if (sessionIDClient == session.getToken()){
+            configs.put(parameter, value);
+            
+            clientCallBack.printOnClient("setting configuration" + parameter + " value: " + value);
+            logEntry("setConfig function invoked - session ID: " + sessionIDClient);
+        }
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////   

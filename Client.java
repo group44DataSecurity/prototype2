@@ -27,7 +27,6 @@ public class Client {
         
         clientCallBackInterface clientcallback = new ClientCallBack();
         service.setClientCallBack(clientcallback);
-        // User user1 = new User("client1", "password1");
 
         User user = getUser();
         while (!service.authenticate(user)) {
@@ -36,16 +35,20 @@ public class Client {
         }
 
         System.out.println("Authenticated user.");
+        int sessionID = service.getSessionId();
+        service.start();
         //service.restart(); 
-        service.print("file1.pdf", printers[0]);
-        service.print("file2.pdf", printers[0]);
-        service.print("file3.pdf", printers[0]);
-        service.queue(printers[0]);
-        service.topQueue(printers[0], 2);
-        service.queue(printers[0]);
-        service.setConfig("myParameter", "100");
-        service.setConfig("myParameter", "200");
-        service.readConfig("myParameter");
+        service.print(sessionID,"file1.pdf", printers[0]);
+        service.print(sessionID,"file2.pdf", printers[0]);
+        service.print(sessionID,"file3.pdf", printers[0]);
+        service.status(sessionID, printers[0]);
+        service.queue(sessionID,printers[0]);
+        service.topQueue(sessionID,printers[0], 2);
+        service.queue(sessionID,printers[0]);
+        service.setConfig(sessionID," myParameter", " 100");
+        service.setConfig(sessionID," toner", " blue");
+        service.readConfig(sessionID," myParameter");
+        service.stop();
         System.out.println("-----------------------------------");
         
     }
