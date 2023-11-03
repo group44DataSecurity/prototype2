@@ -38,7 +38,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
 
         
         loggedClientList.add(new User("client1", "password1"));
-        loggedClientList.add(new User("client2", "passowrd2"));
+        loggedClientList.add(new User("client2", "password2"));
         //initialize printers 
         
         initPrinters(printersNames);
