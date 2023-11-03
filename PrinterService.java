@@ -235,7 +235,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         return hexString.toString();
     }
 
-    public boolean authenticate(User user) throws RemoteException, NoSuchAlgorithmException{
+    public int authenticate(User user) throws RemoteException, NoSuchAlgorithmException{
         
         if (database.containsKey(user.getUsername())) {
             List<byte[]> pwsaltList = database.get(user.getUsername());
@@ -246,11 +246,11 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             
             // Check user entered password against out hashed and salted database
             if (toHex(password).equals(toHex(passwordIn))) {
-                return true;
+                return getSessionId();
             }  
         } 
 
-        return false;
+        return 0;
     }
     public int getSessionToken(int token){
         sessionToken=token; 

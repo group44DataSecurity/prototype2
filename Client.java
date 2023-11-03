@@ -29,13 +29,14 @@ public class Client {
         service.setClientCallBack(clientcallback);
 
         User user = getUser();
-        while (!service.authenticate(user)) {
+        int sessionID = service.authenticate(user);
+        while (sessionID == 0) {
             System.out.println("Try again. Wrong credentials.");
             user = getUser();
+            sessionID = service.authenticate(user);
         }
 
         System.out.println("Authenticated user.");
-        int sessionID = service.getSessionId();
         service.start();
         //service.restart(); 
         service.print(sessionID,"file1.pdf", printers[0]);

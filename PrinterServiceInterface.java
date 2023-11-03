@@ -27,7 +27,7 @@ public interface PrinterServiceInterface extends Remote {
     
     public String[] getPrintersList() throws RemoteException;
 
-    public boolean authenticate (User user ) throws RemoteException, NoSuchAlgorithmException;
+    public int authenticate (User user ) throws RemoteException, NoSuchAlgorithmException;
 
     public void setClientCallBack(clientCallBackInterface clientcallback) throws RemoteException;
 
