@@ -29,7 +29,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private int sessionToken;
 
     // Create the log file
-    String fileName = "log.txt"; // TODO: Add logs for remaining commands
+    String fileName = "log.txt";
 
     public PrinterService() throws RemoteException, NoSuchAlgorithmException {
         super();
@@ -103,7 +103,6 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private Printer getPrinter(String printer) {
         Printer foundPrinter = printers.get(printer);
         if (foundPrinter == null) {
-            // TODO: Return error / add new printer?
             return null;
         }
         return foundPrinter;
@@ -193,7 +192,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
                                                                       // server to the user's display
         
         if (sessionIDClient == session.getToken()){
-            clientCallBack.printOnClient("reading configuration: " + configs.get(parameter)); // TODO: print on user's display
+            clientCallBack.printOnClient("reading configuration: " + configs.get(parameter));
 
 
             logEntry("readConfig function invoked, printing on display - session ID: " + sessionIDClient);

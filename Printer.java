@@ -40,7 +40,7 @@ public class Printer {
                           // the form <job number> <file name>
         List<String> queuelist = new ArrayList<String>();
         for (Job j : printerQueue) {
-            queuelist.add("Job number: " + j.jobNumber + "   " + "Filename: " + j.fileName); // TODO: print on user's display
+            queuelist.add("Job number: " + j.jobNumber + "   " + "Filename: " + j.fileName);
         }
         
         return queuelist;
