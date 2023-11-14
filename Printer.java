@@ -24,13 +24,9 @@ public class Printer {
         prevJobNumber = 0;
         status = true;
         printerQueue = new LinkedList<Job>();
-        // printerQueue = new HashMap<>;
 
     }
 
-    /* public LinkedList<Job> getQueue(){
-        return printerQueue;
-    } */
     public String getName() {
         return name;
     }

@@ -2,8 +2,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
@@ -12,10 +10,6 @@ public class Client {
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, NoSuchAlgorithmException {
         int port = 5099;
-        // String name = "hello";
-        // HelloService service = (HelloService)
-        // Naming.lookup("rmi://localhost:"+port+"/"+name);
-        // System.out.println("--- " + service.echo("hey server"));
 
         String name = "print";
         PrinterServiceInterface service = (PrinterServiceInterface) Naming
@@ -38,7 +32,7 @@ public class Client {
 
         System.out.println("Authenticated user.");
         service.start();
-        //service.restart(); 
+        service.restart(); 
         service.print(sessionID,"file1.pdf", printers[0]);
         service.print(sessionID,"file2.pdf", printers[0]);
         service.print(sessionID,"file3.pdf", printers[0]);

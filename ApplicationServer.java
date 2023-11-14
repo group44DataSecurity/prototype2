@@ -9,17 +9,8 @@ import javax.print.PrintService;
 public class ApplicationServer {
 
     public static void main(String[] args) throws RemoteException, NoSuchAlgorithmException {
-        //Registry registry = LocateRegistry.createRegistry(5099);
-        //registry.rebind("hello", new HelloServant());
-
         int port = 5099;
         Registry registry = LocateRegistry.createRegistry(port);
-
-        String AUTHname = "session";
-        //AuthenticationService authenticationService = new AuthenticationService();
-        //registry.rebind(AUTHname, authenticationService);
-        //int sessionToken = authenticationService.getToken();
-        //System.out.println("--------Session token:" + sessionToken);
 
 
         String name = "print";

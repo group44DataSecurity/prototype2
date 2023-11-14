@@ -1,10 +1,6 @@
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
-import java.util.Map;
-import java.util.HashMap;
-
 
 
 public class AuthenticationService extends UnicastRemoteObject implements AuthenticationServiceInterface{
@@ -19,10 +15,8 @@ public class AuthenticationService extends UnicastRemoteObject implements Authen
 
     public int getToken() throws RemoteException{
         return token;
-
     }
 
-   
     public boolean isActive(int token) throws RemoteException{
         if (token!=0) return true;
         else return false;
