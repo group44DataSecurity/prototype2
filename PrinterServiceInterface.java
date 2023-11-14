@@ -11,11 +11,11 @@ public interface PrinterServiceInterface extends Remote {
 
     public void topQueue(int sessionID, String printer, int job) throws RemoteException; // moves job to the top of the queue
 
-    public void start() throws RemoteException; // starts the print server
+    public void start(int sessionID) throws RemoteException; // starts the print server
 
-    public void stop() throws RemoteException; // stops the print server
+    public void stop(int sessionID) throws RemoteException; // stops the print server
 
-    public void restart() throws RemoteException; // stops the print server, clears the print queue and starts the print server again
+    public void restart(int sessionID) throws RemoteException; // stops the print server, clears the print queue and starts the print server again
 
     public void status(int sessionID, String printer) throws RemoteException; // prints status of printer on the user's display
 

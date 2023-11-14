@@ -1,0 +1,107 @@
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+print function invoked - session ID: -192797718
+print function invoked - session ID: -192797718
+print function invoked - session ID: -192797718
+status function invoked - session ID: -192797718
+queue function invoke - session ID: -192797718
+Top queue function invoke - session ID: -192797718
+queue function invoke - session ID: -192797718
+setConfig function invoked - session ID: -192797718
+setConfig function invoked - session ID: -192797718
+readConfig function invoked, printing on display - session ID: -192797718
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+print function invoked - session ID: 1747280439
+print function invoked - session ID: 1747280439
+print function invoked - session ID: 1747280439
+status function invoked - session ID: 1747280439
+queue function invoke - session ID: 1747280439
+Top queue function invoke - session ID: 1747280439
+queue function invoke - session ID: 1747280439
+setConfig function invoked - session ID: 1747280439
+setConfig function invoked - session ID: 1747280439
+readConfig function invoked, printing on display - session ID: 1747280439
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+status function invoked - session ID: 1598978852
+queue function invoke - session ID: 1598978852
+Top queue function invoke - session ID: 1598978852
+queue function invoke - session ID: 1598978852
+setConfig function invoked - session ID: 1598978852
+setConfig function invoked - session ID: 1598978852
+readConfig function invoked, printing on display - session ID: 1598978852
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+Access denied!
+Access denied!
+Access denied!
+status function invoked - session ID: 1500545514
+Access denied!
+Access denied!
+Access denied!
+setConfig function invoked - session ID: 1500545514
+setConfig function invoked - session ID: 1500545514
+readConfig function invoked, printing on display - session ID: 1500545514
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+bob print access denied
+bob print access denied
+bob print access denied
+status function invoked - session ID: -1234148932
+bob queue access denied
+bob topQueue access denied
+bob queue access denied
+setConfig function invoked - session ID: -1234148932
+setConfig function invoked - session ID: -1234148932
+readConfig function invoked, printing on display - session ID: -1234148932
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+print function invoked - session ID: -1030814572
+print function invoked - session ID: -1030814572
+print function invoked - session ID: -1030814572
+status function invoked - session ID: -1030814572
+queue function invoke - session ID: -1030814572
+Top queue function invoke - session ID: -1030814572
+queue function invoke - session ID: -1030814572
+setConfig function invoked - session ID: -1030814572
+setConfig function invoked - session ID: -1030814572
+readConfig function invoked, printing on display - session ID: -1030814572
+--Print server stopped.
+Session ID assigned
+george start access denied
+george restart access denied
+print function invoked - session ID: 887896434
+print function invoked - session ID: 887896434
+print function invoked - session ID: 887896434
+george Status access denied
+queue function invoke - session ID: 887896434
+george topQueue access denied
+queue function invoke - session ID: 887896434
+george Set Config access denied
+george Set Config access denied
+george Read Config access denied
+george stop access denied

@@ -31,8 +31,10 @@ public class Client {
         }
 
         System.out.println("Authenticated user.");
-        service.start();
-        service.restart(); 
+
+        // Simulation of user input into the print server.
+        service.start(sessionID);
+        service.restart(sessionID); 
         service.print(sessionID,"file1.pdf", printers[0]);
         service.print(sessionID,"file2.pdf", printers[0]);
         service.print(sessionID,"file3.pdf", printers[0]);
@@ -43,7 +45,7 @@ public class Client {
         service.setConfig(sessionID," myParameter", " 100");
         service.setConfig(sessionID," toner", " blue");
         service.readConfig(sessionID," myParameter");
-        service.stop();
+        service.stop(sessionID);
         System.out.println("-----------------------------------");
         
     }
