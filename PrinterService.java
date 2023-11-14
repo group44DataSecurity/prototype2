@@ -15,6 +15,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
+// Reading JSON
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class PrinterService extends UnicastRemoteObject implements PrinterServiceInterface {
 
@@ -252,6 +260,17 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
 
         return 0;
     }
+
+    public void loadACL(String filename) throws RemoteException, FileNotFoundException, IOException{
+        try (FileReader reader = new FileReader(filename)){
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+ 
+            JSONArray employeeList = (JSONArray) obj;
+            System.out.println(employeeList);
+        }
+    }
+
     public int getSessionToken(int token){
         sessionToken=token; 
         return sessionToken;
