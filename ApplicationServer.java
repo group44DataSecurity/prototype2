@@ -22,9 +22,6 @@ public class ApplicationServer {
         //service.getSessionToken(sessionToken);
 
         
-        System.out.println("Loading the JSON...");
-        service.loadACL("UserPermissions.json");
-        
         System.out.println("Creating registry for port: " + port);
         //Registry registry = LocateRegistry.createRegistry(port);
         System.out.println("rebinding service to name: " + name);

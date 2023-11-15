@@ -2,6 +2,9 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
+import org.json.simple.parser.ParseException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public interface PrinterServiceInterface extends Remote {
     
@@ -27,7 +30,7 @@ public interface PrinterServiceInterface extends Remote {
     
     public String[] getPrintersList() throws RemoteException;
 
-    public int authenticate (User user ) throws RemoteException, NoSuchAlgorithmException;
+    public int authenticate(User user) throws NoSuchAlgorithmException, FileNotFoundException, IOException, ParseException;
 
     public void setClientCallBack(clientCallBackInterface clientcallback) throws RemoteException;
 

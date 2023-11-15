@@ -18,7 +18,6 @@ import java.security.SecureRandom;
 // Reading JSON
 import java.io.FileReader;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,7 +33,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
     private List<User> loggedClientList = new ArrayList<>();
     private clientCallBackInterface clientCallBack;
     private AuthenticationServiceInterface session;
-    private JSONObject jsonAccessList;
+    private JSONArray jsonAccessList;
     private User authenticatedUser;
 
     private int sessionToken;
@@ -239,8 +238,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
                     clientCallBack.printOnClient("Printer is not active");
                 }
                 logEntry("status function invoked - session ID: " + sessionIDClient);
-            }
-            else {
+            } else {
                 logEntry(authenticatedUser.getUsername() + " Status access denied");
                 clientCallBack.printOnClient("You do not have permissions to use Status");
             }
@@ -304,7 +302,7 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         return hexString.toString();
     }
 
-    public int authenticate(User user) throws RemoteException, NoSuchAlgorithmException {
+    public int authenticate(User user) throws NoSuchAlgorithmException, FileNotFoundException, IOException, ParseException {
 
         if (database.containsKey(user.getUsername())) {
             List<byte[]> pwsaltList = database.get(user.getUsername());
@@ -316,25 +314,26 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             // Check user entered password against out hashed and salted database
             if (toHex(password).equals(toHex(passwordIn))) {
                 authenticatedUser = user;
+                loadACL("UserRoles.json", "RolePermissions.json");
                 return getSessionId();
-
             }
+
         }
 
         return 0;
     }
 
-    public Object loadACL(String filename) throws RemoteException, FileNotFoundException, IOException, ParseException {
+    public void loadACL(String userRoleFile, String rolePermissionsFile)
+            throws RemoteException, FileNotFoundException, IOException, ParseException {
         // JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader(filename)) {
-            // Read JSON file
+        String role = null;
+        try (FileReader reader = new FileReader(userRoleFile)) {
+            // Read user's role
             JSONObject obj = (JSONObject) jsonParser.parse(reader);
+            role = (String) obj.get(authenticatedUser.getUsername());
 
-            // JSONArray employeeList = (JSONArray) obj;
-            jsonAccessList = obj;
-            return obj;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -342,14 +341,46 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;
+
+        try (FileReader reader = new FileReader(rolePermissionsFile)) {
+            // Read role's permissions
+            JSONObject obj = (JSONObject) jsonParser.parse(reader);
+            JSONObject roleObj = (JSONObject) obj.get(role);
+            JSONArray functions = (JSONArray) roleObj.get("functions");
+            JSONArray inherits = (JSONArray) roleObj.get("inherits");
+            jsonAccessList = combineRoles(obj, functions, inherits);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private JSONArray combineRoles(JSONObject obj, JSONArray functions, JSONArray inherits) {
+        if (inherits.size() == 0 ) {
+            return functions;
+        }
+        for (int i = 0; i < inherits.size(); i++) {
+            String newRole = (String) inherits.get(i);
+            JSONObject roleObj = (JSONObject) obj.get(newRole);
+            JSONArray newFunctions = (JSONArray) roleObj.get("functions");
+            JSONArray newInherits = (JSONArray) roleObj.get("inherits");
+            
+            functions.addAll(newFunctions);
+
+            functions = combineRoles(obj, functions, newInherits);
+        }
+        return functions;
     }
 
     private Boolean hasAccess(String function) {
         if (authenticatedUser != null) {
-            JSONArray permissions = (JSONArray) jsonAccessList.get(authenticatedUser.getUsername());
-            for (int i = 0; i < permissions.size(); i++) {
-                if (permissions.get(i).equals(function)) {
+            for (int i = 0; i < jsonAccessList.size(); i++) {
+                if (jsonAccessList.get(i).equals(function)) {
                     return true;
                 }
             }

@@ -4,11 +4,13 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+import org.json.simple.parser.ParseException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Client {
     static Scanner input = new Scanner(System.in);
-
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException, NoSuchAlgorithmException, FileNotFoundException, IOException, ParseException {
         int port = 5099;
 
         String name = "print";

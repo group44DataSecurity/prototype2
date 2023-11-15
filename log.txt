@@ -105,3 +105,53 @@ george Set Config access denied
 george Set Config access denied
 george Read Config access denied
 george stop access denied
+Session ID assigned
+Session ID assigned
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+print function invoked - session ID: -1326120166
+print function invoked - session ID: -1326120166
+print function invoked - session ID: -1326120166
+status function invoked - session ID: -1326120166
+queue function invoke - session ID: -1326120166
+Top queue function invoke - session ID: -1326120166
+queue function invoke - session ID: -1326120166
+setConfig function invoked - session ID: -1326120166
+setConfig function invoked - session ID: -1326120166
+readConfig function invoked, printing on display - session ID: -1326120166
+--Print server stopped.
+Session ID assigned
+--Print server started.
+--Print server stopped.
+--Print server started.
+--Print server restarted.
+bob print access denied
+bob print access denied
+bob print access denied
+status function invoked - session ID: 1569232828
+bob queue access denied
+bob topQueue access denied
+bob queue access denied
+setConfig function invoked - session ID: 1569232828
+setConfig function invoked - session ID: 1569232828
+readConfig function invoked, printing on display - session ID: 1569232828
+--Print server stopped.
+Session ID assigned
+cecilia start access denied
+cecilia stop access denied
+cecilia start access denied
+--Print server restarted.
+print function invoked - session ID: 432274740
+print function invoked - session ID: 432274740
+print function invoked - session ID: 432274740
+cecilia Status access denied
+queue function invoke - session ID: 432274740
+Top queue function invoke - session ID: 432274740
+queue function invoke - session ID: 432274740
+cecilia Set Config access denied
+cecilia Set Config access denied
+cecilia Read Config access denied
+cecilia stop access denied

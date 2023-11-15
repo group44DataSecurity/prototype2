@@ -1,0 +1,36 @@
+{
+   "admin": {
+      "functions": [],
+      "inherits": [
+         "powerUser",
+         "serviceTech"
+      ]
+   },
+   "serviceTech": {
+      "functions": [
+         "start",
+         "stop",
+         "restart",
+         "status",
+         "readConfig",
+         "setConfig"
+      ],
+      "inherits": []
+   },
+   "powerUser": {
+      "functions": [
+         "topQueue",
+         "restart"
+      ],
+      "inherits": [
+         "user"
+      ]
+   },
+   "user": {
+      "functions": [
+         "print",
+         "queue"
+      ],
+      "inherits": []
+   }
+}
