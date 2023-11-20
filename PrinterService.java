@@ -54,6 +54,18 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
         loggedClientList.add(new User("fred", "fred123"));
         loggedClientList.add(new User("george", "george123"));
 
+        // Updated user database after company changes.
+        // Comment out the list that is not using and make sure to be using the correct UserRoles json
+        
+        /* loggedClientList.add(new User("alice", "alice123"));
+        loggedClientList.add(new User("cecilia", "cecilia123"));
+        loggedClientList.add(new User("david", "david123"));
+        loggedClientList.add(new User("erica", "erica123"));
+        loggedClientList.add(new User("fred", "fred123"));
+        loggedClientList.add(new User("george", "george123"));
+        loggedClientList.add(new User("ida", "ida123"));
+        loggedClientList.add(new User("henry", "henry123")); */
+
         // initialize printers
         initPrinters(printersNames);
 
@@ -314,6 +326,9 @@ public class PrinterService extends UnicastRemoteObject implements PrinterServic
             // Check user entered password against out hashed and salted database
             if (toHex(password).equals(toHex(passwordIn))) {
                 authenticatedUser = user;
+
+                //To change the loaded UserRoles JSON change between UserRoles.json which is pre-company changes
+                // or between UserRolesCompanyChanges, which is the JSON post-company changes.
                 loadACL("UserRoles.json", "RolePermissions.json");
                 return getSessionId();
             }
